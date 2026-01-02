@@ -1,0 +1,13 @@
+# Robots.txt for Кофейня Просто!
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://кофейня-просто.рф/sitemap.xml
+
+# Yandex specific
+User-agent: Yandex
+Allow: /
+Host: кофейня-просто.рф
+
