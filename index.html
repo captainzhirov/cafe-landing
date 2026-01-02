@@ -1579,6 +1579,49 @@
                 behavior: 'smooth'
             });
         }
+
+        // Analytics: Track store button clicks
+        document.querySelectorAll('.store-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const isAppStore = this.href.includes('apple.com');
+                const eventName = isAppStore ? 'app_store_click' : 'google_play_click';
+                ym(106102106, 'reachGoal', eventName);
+            });
+        });
+
+        // Analytics: Track scroll depth
+        let scrolled50 = false;
+        let scrolled100 = false;
+        window.addEventListener('scroll', function() {
+            const scrollPercent = (window.scrollY + window.innerHeight) / document.body.scrollHeight * 100;
+            
+            if (!scrolled50 && scrollPercent >= 50) {
+                scrolled50 = true;
+                ym(106102106, 'reachGoal', 'scroll_50');
+            }
+            
+            if (!scrolled100 && scrollPercent >= 95) {
+                scrolled100 = true;
+                ym(106102106, 'reachGoal', 'scroll_100');
+            }
+        });
+
+        // Analytics: Track section visibility
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const sectionId = entry.target.id;
+                    if (sectionId) {
+                        ym(106102106, 'reachGoal', 'section_view_' + sectionId);
+                        sectionObserver.unobserve(entry.target);
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.module-section[id]').forEach(section => {
+            sectionObserver.observe(section);
+        });
     </script>
 </body>
 </html>
